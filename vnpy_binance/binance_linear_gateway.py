@@ -813,8 +813,18 @@ class BinanceLinearTradeWebsocketApi(WebsocketClient):
         offset = self.gateway.get_order(ord_data["c"]).offset if self.gateway.get_order(ord_data["c"]) else None
         
         # In STOP_LOSS, the price is in P field, but in LIMIT, the price is in p field
+        # {'s': 'CKBUSDT', 'c': '240810000', 'S': 'BUY', 'o': 'MARKET', 'f': 'GTC', 'q': '649', 'p': '0', 'ap': '0.0185110', 
+        # 'sp': '0.0185060', 'x': 'TRADE', 'X': 'FILLED', 'i': 2370618, 'l': '649', 'z': '649', 'L': '0.0185110', 'n': '0.00000990', 
+        # 'N': 'BNB', 'T': 172663713, 't': 19261, 'b': '0', 'a': '36.4002000', 'm': False, 'R': False, 'wt': 'CONTRACT_PRICE', 
+        # 'ot': 'STOP_MARKET', 'ps': 'BOTH', 'cp': False, 'rp': '0', 'pP': False, 'si': 0, 'ss': 0, 'V': 'NONE', 'pm': 'NONE', 'gtd': 0}
+        # In STOP_LOSS, the price is in P field, but in LIMIT, the price is in p field
+        if 0.0 == float(packet["p"]):
+            price: float = float(packet["P"])
+        else:
+            price: float = float(packet["p"])
+            
         if 0.0 == float(ord_data["p"]):
-            price: float = float(ord_data["P"])
+            price: float = float(ord_data["ap"])
         else:
             price: float = float(ord_data["p"])
             
