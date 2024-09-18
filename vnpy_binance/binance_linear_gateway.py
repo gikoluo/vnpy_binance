@@ -813,10 +813,10 @@ class BinanceLinearTradeWebsocketApi(WebsocketClient):
         offset = self.gateway.get_order(ord_data["c"]).offset if self.gateway.get_order(ord_data["c"]) else None
         
         # In STOP_LOSS, the price is in P field, but in LIMIT, the price is in p field
-        if 0.0 == float(packet["p"]):
-            price: float = float(packet["P"])
+        if 0.0 == float(ord_data["p"]):
+            price: float = float(ord_data["P"])
         else:
-            price: float = float(packet["p"])
+            price: float = float(ord_data["p"])
             
         order: OrderData = OrderData(
             symbol=ord_data["s"],
