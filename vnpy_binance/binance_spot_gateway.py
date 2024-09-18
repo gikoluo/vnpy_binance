@@ -742,6 +742,12 @@ class BinanceSpotTradeWebsocketApi(WebsocketClient):
             orderid: str = packet["C"]
 
         offset = self.gateway.get_order(orderid).offset if self.gateway.get_order(orderid) else None
+        
+        # In STOP_LOSS, the price is in P field, but in LIMIT, the price is in p field
+        if 0.0 == float(packet["p"]):
+            price: float = float(packet["P"])
+        else:
+            price: float = float(packet["p"])
 
         order: OrderData = OrderData(
             symbol=packet["s"].lower(),
@@ -749,7 +755,7 @@ class BinanceSpotTradeWebsocketApi(WebsocketClient):
             orderid=orderid,
             type=ORDERTYPE_BINANCE2VT[packet["o"]],
             direction=DIRECTION_BINANCE2VT[packet["S"]],
-            price=float(packet["p"]),
+            price=price,
             volume=float(packet["q"]),
             traded=float(packet["z"]),
             status=STATUS_BINANCE2VT[packet["X"]],
