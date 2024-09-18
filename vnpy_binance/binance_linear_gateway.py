@@ -818,11 +818,6 @@ class BinanceLinearTradeWebsocketApi(WebsocketClient):
         # 'N': 'BNB', 'T': 172663713, 't': 19261, 'b': '0', 'a': '36.4002000', 'm': False, 'R': False, 'wt': 'CONTRACT_PRICE', 
         # 'ot': 'STOP_MARKET', 'ps': 'BOTH', 'cp': False, 'rp': '0', 'pP': False, 'si': 0, 'ss': 0, 'V': 'NONE', 'pm': 'NONE', 'gtd': 0}
         # In STOP_LOSS, the price is in P field, but in LIMIT, the price is in p field
-        if 0.0 == float(packet["p"]):
-            price: float = float(packet["P"])
-        else:
-            price: float = float(packet["p"])
-            
         if 0.0 == float(ord_data["p"]):
             price: float = float(ord_data["ap"])
         else:
