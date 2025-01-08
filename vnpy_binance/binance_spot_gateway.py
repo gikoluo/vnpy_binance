@@ -794,6 +794,12 @@ class BinanceSpotTradeWebsocketApi(WebsocketClient):
         self.gateway.write_log(f"Trade Websocket API is disconnected, code: {status_code}, msg: {msg}")
         self.gateway.rest_api.start_user_stream()
 
+    def on_error(self, e: Exception) -> None:
+        """
+        Callback when exception raised.
+        """
+        self.gateway.write_log(f"Trade Websocket API exception: {e}")
+
 
 class BinanceSpotDataWebsocketApi(WebsocketClient):
     """The data websocket API of BinanceSpotGateway"""
@@ -949,7 +955,13 @@ class BinanceSpotDataWebsocketApi(WebsocketClient):
 
     def on_disconnected(self, status_code: int, msg: str) -> None:
         """Callback when server is disconnected"""
-        self.gateway.write_log("Data Websocket API is disconnected, code: {status_code}, msg: {msg}")
+        self.gateway.write_log(f"Data Websocket API is disconnected, code: {status_code}, msg: {msg}")
+
+    def on_error(self, e: Exception) -> None:
+        """
+        Callback when exception raised.
+        """
+        self.gateway.write_log(f"Data Websocket API exception: {e}")
 
 
 def generate_datetime(timestamp: float) -> datetime:
